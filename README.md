@@ -2,6 +2,10 @@
 
 A very minimal Python project.
 
+## Requirements
+
+- Python 3.9+
+
 ## Run
 
 ```bash
