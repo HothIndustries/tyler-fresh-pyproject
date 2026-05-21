@@ -8,14 +8,14 @@ from urllib.parse import urlparse
 from urllib.request import urlopen
 
 
-def _is_private_or_local_address(ip) -> bool:
+def _is_private_or_local_address(ip_address_obj) -> bool:
     return (
-        ip.is_private
-        or ip.is_loopback
-        or ip.is_link_local
-        or ip.is_multicast
-        or ip.is_reserved
-        or ip.is_unspecified
+        ip_address_obj.is_private
+        or ip_address_obj.is_loopback
+        or ip_address_obj.is_link_local
+        or ip_address_obj.is_multicast
+        or ip_address_obj.is_reserved
+        or ip_address_obj.is_unspecified
     )
 
 
@@ -58,12 +58,12 @@ def make_request(url: str, timeout: float = 10.0) -> str:
 
 
 def main(argv: list[str] | None = None) -> None:
-    args = sys.argv[1:] if argv is None else argv
-    if not args:
+    cli_args = sys.argv[1:] if argv is None else argv
+    if not cli_args:
         print("Hello from tyler-fresh-pyproject!")
         return
 
     try:
-        print(make_request(args[0]))
+        print(make_request(cli_args[0]))
     except ValueError as exc:
         print(exc, file=sys.stderr)
