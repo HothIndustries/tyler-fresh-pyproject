@@ -1,6 +1,6 @@
 import io
 import unittest
-from contextlib import redirect_stdout
+from contextlib import redirect_stderr, redirect_stdout
 from unittest.mock import patch
 
 from tyler_fresh_pyproject import main, make_request
@@ -17,7 +17,7 @@ class MockResponse:
         return self
 
     def __exit__(self, exc_type, exc, tb) -> None:
-        return None
+        pass
 
 
 class RequestsFeatureTests(unittest.TestCase):
@@ -48,6 +48,22 @@ class RequestsFeatureTests(unittest.TestCase):
             main([])
 
         self.assertEqual(output.getvalue().strip(), "Hello from tyler-fresh-pyproject!")
+
+    def test_make_request_rejects_non_http_schemes(self) -> None:
+        with self.assertRaisesRegex(ValueError, "Only http and https URLs are supported."):
+            make_request("ftp://example.com")
+
+    @patch("tyler_fresh_pyproject.make_request")
+    def test_main_prints_user_friendly_error_for_failed_request(self, mocked_make_request) -> None:
+        mocked_make_request.side_effect = ValueError("Request failed: boom")
+        stdout = io.StringIO()
+        stderr = io.StringIO()
+
+        with redirect_stdout(stdout), redirect_stderr(stderr):
+            main(["https://example.com"])
+
+        self.assertEqual(stdout.getvalue().strip(), "")
+        self.assertEqual(stderr.getvalue().strip(), "Request failed: boom")
 
 
 if __name__ == "__main__":
