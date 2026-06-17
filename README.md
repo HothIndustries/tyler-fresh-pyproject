@@ -11,3 +11,9 @@ A very minimal Python project.
 ```bash
 python -m tyler_fresh_pyproject
 ```
+
+To make an HTTP GET request:
+
+```bash
+python -m tyler_fresh_pyproject https://example.com
+```
