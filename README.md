@@ -11,3 +11,9 @@ A very minimal Python project.
 ```bash
 python -m tyler_fresh_pyproject
 ```
+
+To make an HTTP request and print the response body:
+
+```bash
+python -m tyler_fresh_pyproject https://example.com
+```
